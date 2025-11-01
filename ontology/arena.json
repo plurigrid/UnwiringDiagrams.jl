@@ -1,0 +1,71 @@
+{
+  "metadata": {
+    "seed": 1069,
+    "agent_name": "amelia",
+    "timestamp": "2025-11-01T00:00:00Z",
+    "session_id": "amelia-v0.4-init",
+    "branch": "feat/amelia-v0.4-arena-protocol"
+  },
+  "play_channel": {
+    "system_type": "olog",
+    "mutations": [],
+    "composed_from": []
+  },
+  "coplay_channel": {
+    "status": "pending",
+    "conflicts": [],
+    "new_tasks": []
+  },
+  "tasks": [
+    {
+      "id": "amelia-setup",
+      "title": "Initialize Amelia v0.4 protocol",
+      "description": "Set up arena.json schema, HTTP bridge, and play/coplay channels",
+      "status": "in_progress",
+      "assigned_to": "amelia",
+      "focus_area": "schema",
+      "context_tokens": 2000
+    },
+    {
+      "id": "http-bridge",
+      "title": "Build HTTP bridge encoder",
+      "description": "Encode categorical ontology → legacy HTTP/REST endpoints",
+      "status": "backlog",
+      "assigned_to": "unassigned",
+      "focus_area": "informal",
+      "context_tokens": 3000
+    },
+    {
+      "id": "team-reconciliation",
+      "title": "Implement arena reconciliation logic",
+      "description": "Merge peer arenas, resolve conflicts, compose state",
+      "status": "backlog",
+      "assigned_to": "unassigned",
+      "focus_area": "schema",
+      "context_tokens": 5000
+    }
+  ],
+  "state": {
+    "systems": {
+      "petri_net": {
+        "places": [],
+        "transitions": [],
+        "arcs": []
+      },
+      "causal_loop": {
+        "entities": [],
+        "relationships": []
+      },
+      "olog": {
+        "objects": [],
+        "arrows": []
+      }
+    },
+    "version": "0.4.0"
+  },
+  "reconciliation": {
+    "waiting_for_peers": [],
+    "ready_to_merge": false,
+    "approval_votes": {}
+  }
+}

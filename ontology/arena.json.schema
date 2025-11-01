@@ -1,0 +1,168 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plurigrid Arena State Schema v0.4",
+  "description": "Autopoietic arena state for collaborative play/coplay composition",
+  "type": "object",
+  "required": ["metadata", "tasks", "state"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["seed", "agent_name", "timestamp", "session_id"],
+      "properties": {
+        "seed": {
+          "type": "integer",
+          "const": 1069,
+          "description": "Balanced ternary seed: [+1, -1, -1, +1, +1, +1, +1]"
+        },
+        "agent_name": {
+          "type": "string",
+          "description": "Unique agent identifier (e.g., 'amelia', 'causality', 'duck')"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO8601 UTC timestamp"
+        },
+        "session_id": {
+          "type": "string",
+          "description": "Unique session identifier for tracking gm→gn cycles"
+        },
+        "branch": {
+          "type": "string",
+          "pattern": "feat/[a-z0-9-]+-amelia-.*",
+          "description": "Git branch for this arena"
+        }
+      }
+    },
+    "play_channel": {
+      "type": "object",
+      "description": "Generative state mutations (outbound)",
+      "properties": {
+        "system_type": {
+          "type": "string",
+          "enum": ["informal", "olog", "schema", "petri_net", "causal_loop", "stock_flow", "regulatory_net", "dec"]
+        },
+        "mutations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["operation", "path", "value"],
+            "properties": {
+              "operation": {
+                "type": "string",
+                "enum": ["add", "update", "remove"]
+              },
+              "path": {
+                "type": "string",
+                "description": "JSONPointer path to mutated field"
+              },
+              "value": {}
+            }
+          }
+        },
+        "composed_from": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "List of peer arena IDs merged into this state"
+        }
+      }
+    },
+    "coplay_channel": {
+      "type": "object",
+      "description": "Recognition feedback (inbound)",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["pending", "acknowledged", "reconciling", "approved", "rejected"]
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {"type": "string"},
+              "peer_arenas": {"type": "array"},
+              "resolution": {"type": "string", "enum": ["ours", "theirs", "merged"]}
+            }
+          }
+        },
+        "new_tasks": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["backlog", "in_progress", "completed", "blocked"]
+          },
+          "assigned_to": {
+            "type": "string",
+            "description": "Agent name or 'unassigned'"
+          },
+          "focus_area": {
+            "type": "string",
+            "description": "Categorical system this task targets"
+          },
+          "context_tokens": {
+            "type": "integer",
+            "description": "Estimated tokens needed for this task"
+          }
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "description": "Current ontology snapshot",
+      "properties": {
+        "systems": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "description": "System state by category (petri_net, causal_loop, etc.)"
+          }
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        }
+      }
+    },
+    "reconciliation": {
+      "type": "object",
+      "description": "Team composition metadata",
+      "properties": {
+        "waiting_for_peers": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "List of peer agent names whose arenas we're waiting for"
+        },
+        "ready_to_merge": {
+          "type": "boolean",
+          "description": "All conflicts resolved and team approved"
+        },
+        "approval_votes": {
+          "type": "object",
+          "additionalProperties": {"type": "boolean"},
+          "description": "Team member approval status by name"
+        }
+      }
+    }
+  }
+}
