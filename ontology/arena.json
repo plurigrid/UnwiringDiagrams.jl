@@ -43,6 +43,33 @@
       "assigned_to": "unassigned",
       "focus_area": "schema",
       "context_tokens": 5000
+    },
+    {
+      "id": "chronoscope-generation",
+      "title": "Chronoscope v1.0: Generate 69 demonstration videos",
+      "description": "Orchestrate deterministic video generation (categorical ops, quantum, hypergraph, ducklake, embodied gradualism, ontology integration, arena protocol) seeded with 1069",
+      "status": "backlog",
+      "assigned_to": "chronoscope-orchestrator",
+      "focus_area": "olog",
+      "context_tokens": 8000
+    },
+    {
+      "id": "chronoscope-review",
+      "title": "Team review and composition of Chronoscope videos",
+      "description": "Peer arenas review generated videos, vote on categorical accuracy, compose final demonstration suite",
+      "status": "backlog",
+      "assigned_to": "unassigned",
+      "focus_area": "schema",
+      "context_tokens": 4000
+    },
+    {
+      "id": "chronoscope-broadcast",
+      "title": "Broadcast Chronoscope video status through NATS",
+      "description": "Publish video generation progress (pending → generating → compiled → tested → recorded) to plurigrid.arena.play.chronoscope.* topics",
+      "status": "backlog",
+      "assigned_to": "unassigned",
+      "focus_area": "informal",
+      "context_tokens": 2000
     }
   ],
   "state": {
@@ -59,6 +86,16 @@
       "olog": {
         "objects": [],
         "arrows": []
+      },
+      "chronoscope": {
+        "total_videos": 69,
+        "seed": 1069,
+        "categories": ["categorical-ops", "quantum", "hypergraph-rewriting", "ducklake", "embodied-gradualism", "ontology-integration", "arenaprotocol"],
+        "videos_pending": 69,
+        "videos_generating": 0,
+        "videos_compiled": 0,
+        "videos_tested": 0,
+        "videos_recorded": 0
       }
     },
     "version": "0.4.0"
@@ -74,6 +111,7 @@
     "coplay_topic": "plurigrid.arena.coplay",
     "peer_topic": "plurigrid.arena.peers.>",
     "reconciliation_topic": "plurigrid.arena.reconcile",
+    "chronoscope_topic": "plurigrid.arena.play.chronoscope.>",
     "seed": 1069,
     "last_broadcast": null
   }
