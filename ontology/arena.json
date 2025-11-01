@@ -67,5 +67,14 @@
     "waiting_for_peers": [],
     "ready_to_merge": false,
     "approval_votes": {}
+  },
+  "nats_broadcast": {
+    "server_url": "nats://nonlocal.info:4222",
+    "play_topic": "plurigrid.arena.play.amelia.schema",
+    "coplay_topic": "plurigrid.arena.coplay",
+    "peer_topic": "plurigrid.arena.peers.>",
+    "reconciliation_topic": "plurigrid.arena.reconcile",
+    "seed": 1069,
+    "last_broadcast": null
   }
 }

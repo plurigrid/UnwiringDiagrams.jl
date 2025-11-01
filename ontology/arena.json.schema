@@ -163,6 +163,45 @@
           "description": "Team member approval status by name"
         }
       }
+    },
+    "nats_broadcast": {
+      "type": "object",
+      "description": "NATS broadcaster metadata for real-time arena synchronization",
+      "properties": {
+        "server_url": {
+          "type": "string",
+          "default": "nats://nonlocal.info:4222",
+          "description": "NATS server endpoint"
+        },
+        "play_topic": {
+          "type": "string",
+          "pattern": "^plurigrid\\.arena\\.play\\..+\\..+$",
+          "description": "Outbound generative mutations topic"
+        },
+        "coplay_topic": {
+          "type": "string",
+          "pattern": "^plurigrid\\.arena\\.coplay$",
+          "description": "Inbound recognition feedback topic"
+        },
+        "peer_topic": {
+          "type": "string",
+          "pattern": "^plurigrid\\.arena\\.peers\\.>$",
+          "description": "Wildcard subscription for all peer arenas"
+        },
+        "reconciliation_topic": {
+          "type": "string",
+          "pattern": "^plurigrid\\.arena\\.reconcile$",
+          "description": "Reconciliation request broadcast topic"
+        },
+        "seed": {
+          "type": "integer",
+          "const": 1069
+        },
+        "last_broadcast": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     }
   }
 }

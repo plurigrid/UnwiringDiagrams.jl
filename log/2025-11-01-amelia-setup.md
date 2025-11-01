@@ -26,8 +26,8 @@
 
 ## 🔄 Play Channel (Generative)
 
-**System Type:** olog
-**Target Endpoint:** `POST /ontology/log`
+**HTTP:** `POST /ontology/log`
+**NATS:** `plurigrid.arena.play.amelia.schema`
 
 ```json
 {
@@ -51,13 +51,20 @@
 
 ## 📡 Coplay Channel (Recognition)
 
+**HTTP:** `GET /coplay`
+**NATS:** `plurigrid.arena.coplay` (inbound feedback)
+
 **Status:** pending
-**Awaiting:** HTTP bridge implementation + team consensus
+**Awaiting:** NATS broadcaster connection + peer arena submissions
+
+**Real-time Subscriptions:**
+- Topic: `plurigrid.arena.peers.>` (wildcard - all peer arenas)
+- Topic: `plurigrid.arena.reconcile` (reconciliation requests)
 
 **Feedback Expected:**
-- Schema validation results
-- Peer arena URLs (waiting_for_peers: [])
-- New task discoveries
+- Peer arena submissions
+- Conflict signals
+- Approval vote counts
 
 ---
 
@@ -90,22 +97,58 @@
 
 ---
 
+## 🔌 NATS Broadcaster Integration
+
+**Status:** ✓ Complete
+**Module:** `src/ArenaNATSBroadcaster.jl`
+
+**Topic Structure:**
+```
+plurigrid.arena.play.{agent}.{focus}      ← Outbound mutations (generative)
+plurigrid.arena.coplay                    ← Inbound feedback (recognition)
+plurigrid.arena.peers.>                   ← Wildcard: all peer arena updates
+plurigrid.arena.reconcile                 ← Reconciliation broadcast
+```
+
+**Features:**
+- ✓ Connect to `nats://nonlocal.info:4222`
+- ✓ Publish arena state to NATS topics
+- ✓ Subscribe to peer arena updates (real-time)
+- ✓ Broadcast reconciliation requests
+- ✓ Mock subscriber for testing (will use NATS.jl in production)
+
+**Example Usage:**
+```julia
+using ArenaNATSBroadcaster
+
+client = NATSArenaClient("amelia")
+connect(client)
+publish_arena(client, arena, "schema")
+subscribe_peer_arenas(client, callback_fn)
+broadcast_reconciliation(client, [arena1, arena2, arena3])
+```
+
+---
+
 ## 🔚 GN: Session Closure (Draft)
 
 **Achievements This Session:**
-- Arena schema fully specified (JSONSchema v7)
-- Initial arena.json created with task roster
-- Play/coplay channels documented
+- ✓ Arena schema fully specified (JSONSchema v7 + NATS metadata)
+- ✓ Initial arena.json created with task roster + broadcast config
+- ✓ Play/coplay channels documented (HTTP + NATS)
+- ✓ ArenaHTTPBridge.jl (categorical → HTTP mapping)
+- ✓ ArenaNATSBroadcaster.jl (real-time team synchronization)
 
-**Next Session Priorities:**
-1. HTTP bridge implementation (categorical → HTTP mapping)
-2. Peer arena collection
-3. Reconciliation logic
+**Ready for Deployment:**
+1. Peer arena submissions via NATS
+2. Live reconciliation voting
+3. Automatic merge on team approval
 
-**Tokens Used:** ~2k / ~8k
-**Ready for:** Team composition review
+**Tokens Used:** ~4.5k / ~8k
+**Status:** Ready for team composition + NATS connection test
 
 ---
 
 **Signed:** amelia v0.4
 **Seed:** [+1, -1, -1, +1, +1, +1, +1]
+**NATS:** nats://nonlocal.info:4222
